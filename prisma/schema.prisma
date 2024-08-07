@@ -17,36 +17,36 @@ model User {
 }
 
 model Barbershop {
-  id          String               @id @default(uuid())
+  id          String              @id @default(uuid())
   name        String
   address     String
   phones      String[]
   description String
   imageUrl    String
-  services    BarbershopServices[]
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  services    BarbershopService[]
 }
 
-model BarbershopServices {
+model BarbershopService {
   id           String     @id @default(uuid())
   name         String
   description  String
+  imageUrl     String
   price        Decimal    @db.Decimal(10, 2)
   barbershopId String
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
   bookings     Booking[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
 }
 
 model Booking {
-  id        String             @id @default(uuid())
+  id        String            @id @default(uuid())
   userId    String
-  user      User               @relation(fields: [userId], references: [id])
+  user      User              @relation(fields: [userId], references: [id])
   serviceId String
-  service   BarbershopServices @relation(fields: [serviceId], references: [id])
+  service   BarbershopService @relation(fields: [serviceId], references: [id])
   date      DateTime
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
+
