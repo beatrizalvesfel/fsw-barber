@@ -15,18 +15,18 @@ const SidebarSheet = () => {
 
       <div className="flex items-center gap-3 border-b border-solid py-5">
         <Avatar>
-          <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+          <AvatarImage src="https://github.com/beatrizalvesfel.png" />
         </Avatar>
 
         <div>
-          <p className="font-bold">Felipe Rocha</p>
-          <p className="text-xs">felipe@fullstackclub.io</p>
+          <p className="font-bold">Beatriz Alves</p>
+          <p className="text-xs">beatrizalvesfel@gmail.com</p>
         </div>
       </div>
 
       <div className="flex flex-col gap-2 border-b border-solid py-5">
         <SheetClose asChild>
-          <Button className="justify-start gap-2" variant="ghost" asChild>
+          <Button className="justify-start gap-2" asChild>
             <Link href="/">
               <HomeIcon size={18} />
               Início
