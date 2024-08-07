@@ -5,8 +5,9 @@ import { Input } from "./_components/ui/input"
 import Image from "next/image"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/barbershop-item"
-// import { quickSearchOptions } from "./_constants/search"
+import { quickSearchOptions } from "./_constants/search"
 import BookingItem from "./_components/booking-item"
+import Footer from "./_components/footer"
 
 const Home = async () => {
   const barbershops = await db.barbershop.findMany({})
@@ -34,7 +35,7 @@ const Home = async () => {
         </div>
 
         {/* BUSCA RÁPIDA */}
-        {/* <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+        <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptions.map((option) => (
             <Button className="gap-2" variant="secondary" key={option.title}>
               <Image
@@ -46,7 +47,7 @@ const Home = async () => {
               {option.title}
             </Button>
           ))}
-        </div> */}
+        </div>
 
         {/* IMAGEM */}
         <div className="relative mt-6 h-[150px] w-full">
@@ -78,6 +79,7 @@ const Home = async () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
