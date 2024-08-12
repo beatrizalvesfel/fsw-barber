@@ -2,14 +2,31 @@ import { getServerSession } from "next-auth"
 import Header from "../_components/header"
 import { db } from "../_lib/prisma"
 import { authOptions } from "../_lib/auth"
-import { notFound } from "next/navigation"
 import BookingItem from "../_components/booking-item"
+import { Dialog, DialogContent, DialogTrigger } from "../_components/ui/dialog"
+import SignInDialog from "../_components/sign-in-dialog"
+import { Button } from "../_components/ui/button"
+import { LogInIcon } from "lucide-react"
 
 const Bookings = async () => {
   const session = await getServerSession(authOptions)
   if (!session?.user) {
-    // TODO: mostrar pop-up de login
-    return notFound()
+    return (
+      <div className="flex h-full flex-col items-center justify-center p-5">
+        <h2 className="mb-2 font-bold">Faça login para ver os agendamentos!</h2>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <LogInIcon />
+              Fazer login
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="w-[90%]">
+            <SignInDialog />
+          </DialogContent>
+        </Dialog>
+      </div>
+    )
   }
   const confirmedBookings = await db.booking.findMany({
     where: {
