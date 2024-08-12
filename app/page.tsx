@@ -5,24 +5,65 @@ import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/barbershop-item"
 import { quickSearchOptions } from "./_constants/search"
 import BookingItem from "./_components/booking-item"
-import HomeMessage from "./_components/home-messagem"
 import Search from "./_components/search"
 import Link from "next/link"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./_lib/auth"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "./_components/ui/carousel"
 
 const Home = async () => {
+  const session = await getServerSession(authOptions)
   const barbershops = await db.barbershop.findMany({})
   const popularBarbershops = await db.barbershop.findMany({
     orderBy: {
       name: "desc",
     },
   })
+  const confirmedBookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: (session.user as any).id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: {
+          date: "asc",
+        },
+      })
+    : []
 
   return (
     <div>
       {/* header */}
       <Header />
       <div className="p-5">
-        <HomeMessage />
+        {/* TEXTO */}
+        <h2 className="text-xl font-bold">
+          Olá, {session?.user ? session.user.name : "bem vindo"}!
+        </h2>
+        <p>
+          <span className="capitalize">
+            {format(new Date(), "EEEE, dd", { locale: ptBR })}
+          </span>
+          <span>&nbsp;de&nbsp;</span>
+          <span className="capitalize">
+            {format(new Date(), "MMMM", { locale: ptBR })}
+          </span>
+        </p>
 
         {/* BUSCA */}
         <div className="mt-6">
@@ -61,8 +102,22 @@ const Home = async () => {
           />
         </div>
 
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+
         {/* AGENDAMENTO */}
-        <BookingItem />
+
+        <Carousel>
+          <CarouselContent>
+            {confirmedBookings.map((booking) => (
+              <CarouselItem className="basis-5/6" key={booking.id}>
+                <BookingItem booking={booking} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Recomendados
         </h2>
