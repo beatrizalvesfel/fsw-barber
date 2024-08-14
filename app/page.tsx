@@ -53,7 +53,7 @@ const Home = async () => {
       <div className="p-5">
         {/* TEXTO */}
         <h2 className="text-xl font-bold">
-          Olá, {session?.user ? session.user.name : "bem vindo"}!
+          Olá, {session?.user ? session.user.name?.split(" ")[0] : "bem vindo"}!
         </h2>
         <p>
           <span className="capitalize">
