@@ -48,6 +48,8 @@ interface BookingItemProps {
 // TODO: receber agendamento como prop
 const BookingItem = ({ booking }: BookingItemProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const [isDeleteCornfirmationDialogOpen, setIsDeleteCornfirmationDialogOpen] =
+    useState(false)
   const {
     service: { barbershop },
   } = booking
@@ -56,6 +58,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
     try {
       await deleteBooking(booking.id)
       setIsSheetOpen(false)
+      setIsDeleteCornfirmationDialogOpen(false)
       toast.success("Reserva cancelada com sucesso!")
     } catch (error) {
       console.error(error)
@@ -65,6 +68,11 @@ const BookingItem = ({ booking }: BookingItemProps) => {
   const handleSheetOpenChange = (isOpen: boolean) => {
     setIsSheetOpen(isOpen)
   }
+
+  const handleDialogOpen = (isOpen: boolean) => {
+    setIsDeleteCornfirmationDialogOpen(isOpen)
+  }
+
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
       <SheetTrigger className="w-full min-w-[90%]">
@@ -158,7 +166,10 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               </Button>
             </SheetClose>
             {isConfirmed && (
-              <Dialog>
+              <Dialog
+                open={isDeleteCornfirmationDialogOpen}
+                onOpenChange={handleDialogOpen}
+              >
                 <DialogTrigger className="w-full">
                   <Button variant="destructive" className="w-full">
                     Cancelar Reserva
@@ -166,7 +177,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                 </DialogTrigger>
                 <DialogContent className="w-[90%]">
                   <DialogHeader>
-                    <DialogTitle>Você deseja cancelar sua reserva?</DialogTitle>
+                    <DialogTitle>Cancelar reserva</DialogTitle>
                     <DialogDescription>
                       Ao cancelar, você perderá sua reserva e não poderá
                       recuperá-la. Essa ação é irreversível.
@@ -178,15 +189,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                         Voltar
                       </Button>
                     </DialogClose>
-                    <DialogClose className="w-full">
-                      <Button
-                        variant="destructive"
-                        onClick={handleCancelBooking}
-                        className="w-full"
-                      >
-                        Confirmar
-                      </Button>
-                    </DialogClose>
+                    <Button
+                      variant="destructive"
+                      onClick={handleCancelBooking}
+                      className="w-full"
+                    >
+                      Confirmar
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
