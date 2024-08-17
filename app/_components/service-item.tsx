@@ -175,11 +175,13 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
             />
           </div>
           {/* DIREITA */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold">{service.name}</h3>
-            <p className="text-sm text-gray-400">{service.description}</p>
+          <div className="space-y-2 md:flex md:w-full md:justify-between">
+            <div className="md: justify-center md:flex md:flex-col">
+              <h3 className="text-sm font-semibold">{service.name}</h3>
+              <p className="text-sm text-gray-400">{service.description}</p>
+            </div>
             {/* PREÇO E BOTÃO */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between md:flex-col md:gap-2">
               <p className="text-sm font-bold text-primary">
                 {Intl.NumberFormat("pt-BR", {
                   style: "currency",
